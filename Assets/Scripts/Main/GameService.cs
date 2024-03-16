@@ -59,7 +59,7 @@ namespace Command.Main
 
         public void ProcessUnitCommand(UnitCommand command)
         {
-            CommandInvoker.ProcessCommand(command);
+            PlayerService.ProcessUnitCommand(command);
         }
     }
 }

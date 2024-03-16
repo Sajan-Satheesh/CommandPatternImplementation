@@ -1,5 +1,6 @@
 using Command.Actions;
 using Command.Main;
+using System;
 
 namespace Command.Player
 {
@@ -95,6 +96,22 @@ namespace Command.Player
                 PlayerDied(player1);
             else if (player2.AllUnitsDead())
                 PlayerDied(player2);
+        }
+
+        internal void ProcessUnitCommand(UnitCommand command)
+        {
+            SetUnitReferences(command);
+
+            GetPlayerById(command.commandData.ActorPlayerID).ProcessUnitCommand(command);
+        }
+
+        private void SetUnitReferences(UnitCommand command)
+        {
+            UnitController actorUnit = GetPlayerById(command.commandData.ActorPlayerID).GetUnitByID(command.commandData.ActorUnitID);
+            UnitController targetUnit = GetPlayerById(command.commandData.TargetPlayerID).GetUnitByID(command.commandData.TargetUnitID);
+
+            command.SetActorUnit(actorUnit);
+            command.SetTargetUnit(targetUnit);
         }
     }
 }
