@@ -11,6 +11,7 @@ namespace Command.Commands
 
         public abstract void Execute();
 
+        public abstract void Undo();
         public abstract bool WillHitTarget();
 
         public void SetActorUnit(UnitController actorUnit) => this.actorUnit = actorUnit;
