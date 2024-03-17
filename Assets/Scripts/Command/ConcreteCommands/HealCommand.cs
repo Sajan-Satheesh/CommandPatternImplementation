@@ -19,8 +19,9 @@ namespace Command.Commands
             if (willHitTarget)
             {
                 targetUnit.TakeDamage(actorUnit.CurrentPower);
-                actorUnit.Owner.ResetCurrentActiveUnit();
             }
+            actorUnit.Owner.ResetCurrentActiveUnit();
+
         }
         public override bool WillHitTarget() => true;
     }

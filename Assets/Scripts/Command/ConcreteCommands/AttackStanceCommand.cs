@@ -10,7 +10,6 @@ namespace Command.Commands
         {
             this.commandData = commandData;
             willHitTarget = WillHitTarget();
-            addedPower = targetUnit.CurrentPower * 0.2f;
         }
 
         public override void Execute() => GameService.Instance.ActionService.GetActionByType(CommandType.AttackStance).PerformAction(actorUnit, targetUnit, willHitTarget);
@@ -19,9 +18,11 @@ namespace Command.Commands
         {
             if (willHitTarget)
             {
+                if (!targetUnit.IsAlive()) targetUnit.Revive();
                 targetUnit.CurrentPower -= (int)addedPower;
-                actorUnit.Owner.ResetCurrentActiveUnit();
             }
+            actorUnit.Owner.ResetCurrentActiveUnit();
+
         }
         public override bool WillHitTarget() => true;
     }

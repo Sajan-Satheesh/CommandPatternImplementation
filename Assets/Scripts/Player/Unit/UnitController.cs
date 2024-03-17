@@ -147,13 +147,53 @@ namespace Command.Player
 
         public void ResetStats() => CurrentPower = unitScriptableObject.Power;
 
-        public void Revive() => SetAliveState(UnitAliveState.ALIVE);
+        public void Revive() 
+        { 
+            SetAliveState(UnitAliveState.ALIVE);
+            unitView.PlayAnimation(UnitAnimations.IDLE);
+        }
 
         public void Destroy() => UnityEngine.Object.Destroy(unitView.gameObject);
 
         public void ResetUnitIndicator() => unitView.SetUnitIndicator(false);
 
-        public void ProcessUnitCommand(UnitCommand commandToProcess) => GameService.Instance.CommandInvoker.ProcessCommand(commandToProcess);
+        public void ProcessUnitCommand(UnitCommand commandToProcess) { 
+            GameService.Instance.CommandInvoker.ProcessCommand(commandToProcess);
+
+            switch (commandToProcess)
+            {
+                case CleanseCommand:
+                    (commandToProcess as CleanseCommand).powerBeforeCleansing = CurrentPower;
+                    break;
+                case AttackStanceCommand:
+                    (commandToProcess as AttackStanceCommand).addedPower = CurrentPower * 0.2f;
+                    break;
+                case MeditateCommand:
+                    (commandToProcess as MeditateCommand).healthToIncrease = (int)(CurrentMaxHealth * 0.2f);
+                    break;
+                case ThirdEyeCommand:
+                    (commandToProcess as ThirdEyeCommand).healthconverted = (int)(CurrentHealth * 0.25f);
+                    break;
+                default:
+                    break;
+            }
+            /*if( commandToProcess as CleanseCommand != null)
+            {
+                (commandToProcess as CleanseCommand).powerBeforeCleansing = CurrentPower;
+            }
+            else if (commandToProcess as AttackStanceCommand != null)
+            {
+                (commandToProcess as AttackStanceCommand).addedPower = CurrentPower * 0.2f; ;
+            }
+            else if (commandToProcess as MeditateCommand != null)
+            {
+                (commandToProcess as MeditateCommand).healthToIncrease = (int)(CurrentMaxHealth * 0.2f); 
+            }
+            else if (commandToProcess as ThirdEyeCommand != null)
+            {
+                (commandToProcess as ThirdEyeCommand).healthconverted = (int)(CurrentHealth * 0.25f);
+            }*/
+        }
 
         public Vector3 GetEnemyPosition() 
         {
