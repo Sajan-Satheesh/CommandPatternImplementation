@@ -24,9 +24,9 @@ public class ReplayService
 
     public async void ExecuteNext()
     {
-        while(replayStack.Count > 0 && replayState == ReplayState.ACTIVE)
+        await Task.Delay(1000);
+        if (replayStack.Count > 0 )
         {
-            await Task.Delay(1000);
             GameService.Instance.ProcessUnitCommand(replayStack.Pop());
         }
         
