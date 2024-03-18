@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 public class ReplayService 
 {
-    private Stack<ICommand> replayStack;
+    private Stack<ICommand> replayStack = new Stack<ICommand>();
 
     public ReplayState replayState { get; private set; }
 
@@ -24,10 +24,11 @@ public class ReplayService
 
     public async void ExecuteNext()
     {
-        if(replayStack.Count > 0 && replayState==ReplayState.ACTIVE)
+        while(replayStack.Count > 0 && replayState == ReplayState.ACTIVE)
         {
             await Task.Delay(1000);
             GameService.Instance.ProcessUnitCommand(replayStack.Pop());
         }
+        
     }
 }

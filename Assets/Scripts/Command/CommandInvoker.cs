@@ -1,11 +1,25 @@
 using Command.Main;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Command.Commands
 {
     public class CommandInvoker
     {
-        private Stack<ICommand> commandRegistry = new Stack<ICommand>();
+        private Stack<ICommand> commandRegistry = new();
+
+        public CommandInvoker() { SubscribeToEvents(); }
+
+        private void SubscribeToEvents()
+        {
+            GameService.Instance.EventService.OnReplayBegin.AddListener(SetReplayStack);
+        }
+
+        private void SetReplayStack()
+        {
+            GameService.Instance.ReplayService.SetCommandStack(commandRegistry) ;
+            commandRegistry.Clear();
+        }
 
         public void ProcessCommand(ICommand commandToProcess)
         {
